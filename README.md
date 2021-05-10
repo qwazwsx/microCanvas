@@ -3,6 +3,7 @@ popup implementation of DrawingBoard JS for a top secret project i'm working on
 
 ![](https://i.imgur.com/xABEKDT.gif)
 
+# [EXAMPLE](https://qwazwsx.xyz/microCanvas/)
 
 # Features:
 
@@ -26,7 +27,7 @@ new microCanvas($('button')[0], (data) => {
   })
 ```
 
-See `index.html` for an example. 
+See [`index.html`](https://qwazwsx.xyz/microCanvas/) for an example. 
 
 *note: you may have to run this file on a server (on a domain other than file://) due to cross-origin policies in Chrome. Try spinning up a test server with `python3 -m http.server`. [stack overflow](https://stackoverflow.com/questions/29983786/blocked-a-frame-of-origin-null-from-accessing-a-cross-origin-frame-chrome/65234451)*
 
