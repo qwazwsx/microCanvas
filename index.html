@@ -10,14 +10,15 @@
 </head>
 
 <body>
+  <h1>microCanvas tester</h1>
+  <button class='button'>open popup</button>
+  <br /> <br /><br />
 
-  <button class='button'>click</button>
-  <br />
   <img class='data' style="border: 2px black solid;">
 
   </img>
   <script>
-    new microCanvas($('button'), (data) => {
+    new microCanvas($('button')[0], (data) => {
       $('.data').attr('src', data)
     })
   </script>
