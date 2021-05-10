@@ -1,0 +1,28 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=.75" />
+  <!-- stylesheet -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="microCanvas/microCanvas.js"></script>
+
+</head>
+
+<body>
+
+  <button class='button'>click</button>
+  <br />
+  <img class='data' style="border: 2px black solid;">
+
+  </img>
+  <script>
+    new microCanvas($('button'), (data) => {
+      $('.data').attr('src', data)
+    })
+  </script>
+
+
+</body>
+
+</html>

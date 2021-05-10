@@ -1,0 +1,91 @@
+body {
+  height: fit-content;
+  overflow-y: hidden;
+  user-select: none;
+}
+
+.drawing-board {height: fit-content;}
+
+
+.drawing-board-control button{
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) !important; */
+  /* transition: box-shadow 1; */
+  transition: all .4s;
+  user-select: none;
+}
+
+/* remove ugly selected outline */
+.drawing-board-control button:focus{
+  outline: none !important;
+}
+
+
+/* .active for selectable elements (pencil, eraser) and :active which is for clickable el's */
+.drawing-board-controls .drawing-board-control button:active, .drawing-board-controls .drawing-board-control button.active {
+  /* background-size: 80%; */
+    transform: scale(0.9);
+}
+
+
+
+/* change icons */
+.drawing-board-control-drawingmode-pencil-button {
+  /* https://fonts.google.com/icons */
+  background-image: url('images/edit.svg');
+  background-size: 85%;
+}
+
+.drawing-board-control-drawingmode-eraser-button{
+  /* https://iconify.design/icon-sets/mdi/eraser.html */
+  background-image: url('images/eraser.svg');
+  background-size: 85%;
+}
+.drawing-board-control-drawingmode-filler-button{
+    /* https://iconify.design/icon-sets/foundation/paint-bucket.html */
+    background-image: url('images/fill.svg');
+    background-size: 85%;
+  }
+
+.drawing-board-control-navigation button{
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.drawing-board-control-navigation-back{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/undo.svg');
+  background-size: 85%;
+  color:transparent !important;
+}
+
+.drawing-board-control-navigation-forward{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/redo.svg');
+  background-size: 85%;
+  color:transparent !important;
+}
+
+.drawing-board-control-navigation-reset{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/clear.svg');
+  background-size: 85%;
+  color:transparent !important
+}
+
+.drawing-board-control-resize-extend{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/extend.svg');
+  background-size: 100%;
+}
+.drawing-board-control-resize-shrink{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/shrink.svg');
+  background-size: 100%;
+}
+.drawing-board-control-save-save{
+  /* https://fonts.google.com/icons */
+  background-image: url('images/save.svg');
+  background-size: 85%;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}

@@ -1,0 +1,197 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- stylesheet -->
+  <link href="drawingboard.min.css" rel="stylesheet">
+  <link href="css.css" rel="stylesheet">
+  <script src="jquery.min.js"></script>
+  <script src="drawingboard.min.js"></script>
+</head>
+
+<body>
+  <title>microCanvas</title>
+  <div id="canvas"></div>
+  <style>
+    #canvas {
+      width: 384px;
+      height: 348px;
+    }
+  </style>
+
+  <script>
+    // custom save button control
+    DrawingBoard.Control.Save = DrawingBoard.Control.extend({
+      name: 'save',
+      prevAnimationTimeout: undefined,
+
+      defaults: {
+        cb: (board) => {
+          console.log('default callback for Save control, cb(this.board):', board)
+        },
+      },
+
+      initialize: function() {
+        var el = `<button class="drawing-board-control-save-save"></button>`
+        this.$el.append(el);
+        var $save = this.$el.find('.drawing-board-control-save-save');
+        $save.on('click', () => {
+          this.opts['cb'](this.board)
+        })
+
+      }
+    })
+
+    // custom resize control
+    DrawingBoard.Control.Resize = DrawingBoard.Control.extend({
+      name: 'resize',
+
+      initialize: function() {
+        var el = `
+          <button class="drawing-board-control-resize-extend"></button>
+          <button class="drawing-board-control-resize-shrink"></button>
+          `
+        this.$el.append(el);
+
+        var $extend = this.$el.find('.drawing-board-control-resize-extend');
+        this.$el.on('click', '.drawing-board-control-resize-extend', $.proxy(function(e) {
+          this.change(100)
+          e.preventDefault();
+        }, this));
+
+        var shrink = this.$el.find('.drawing-board-control-resize-shrink');
+        this.$el.on('click', '.drawing-board-control-resize-shrink', $.proxy(function(e) {
+          this.change(-100)
+          e.preventDefault();
+        }, this));
+      },
+
+      // if absolute == true, n is the size to SET TO, not to extend/shrink BY
+      change(n, absolute) {
+        let $wrapper = $(this.board.$el).find('.drawing-board-canvas-wrapper')
+        // // cancel prev animation
+        // $wrapper.stop()
+        let newHeight
+        if (absolute) {
+          newHeight = n
+        } {
+          newHeight = parseInt($wrapper.css('height').replace('px', '')) + n
+        }
+
+        let img = this.board.canvas.getContext('2d').getImageData(0, 0, this.board.canvas.width, this.board.canvas.height)
+        // let img = this.board.getImg()
+        // let img = this.board.canvas.toDataURL()
+        let pencilSize = this.board.controls[0].val;
+
+        if (newHeight < 50) {
+          newHeight = 50
+        }
+
+        // reset stuff to prevent glitchyness
+        clearInterval(this.prevAnimationTimeout)
+        // maxWindowHeight()
+
+        $wrapper.animate({
+          height: newHeight + 'px'
+        }, {
+          duration: 300,
+          // easing: 'linear',
+          step: (a) => {
+            maxWindowHeight()
+          },
+          complete: () => {
+            this.resize()
+
+            // this.ctx.fillStyle = this.color;
+            // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            // this.ctx.putImageData(img, 0, 0);
+
+            this.board.reset()
+            this.board.resetBackground()
+            // this.board.setImg(img)
+            // this.board.ctx.drawImage(img, 0, 0)
+            this.board.canvas.getContext('2d').putImageData(img, 0, 0)
+            this.board.controls[0].val = pencilSize;
+            this.board.controls[0].updateView()
+            this.board.ctx.lineCap = 'round';
+            this.board.ctx.lineJoin = 'round';
+            maxWindowHeight()
+
+          }
+        })
+
+
+        // // fix weird resize bug
+        this.prevAnimationTimeout = setTimeout(() => {
+          maxWindowHeight()
+        }, 200)
+
+      },
+
+      resize() {
+        this.board.dom.$controls.toggleClass('drawing-board-controls-hidden', (!this.board.controls || !this.board.controls.length));
+        var canvasHeight = this.board.$el.find('.drawing-board-canvas-wrapper').height()
+        this.board.$el.height(canvasHeight);
+        this.board.dom.$canvasWrapper.css('height', canvasHeight + 'px');
+        this.board.dom.$canvas.css('height', canvasHeight + 'px');
+        this.board.canvas.height = canvasHeight;
+      }
+
+    });
+
+
+    // sets window height to full width of page
+    function maxWindowHeight() {
+      let topBar = window.outerHeight - window.innerHeight
+      let body = $('.drawing-board-controls').height() + $('.drawing-board-canvas-wrapper').height()
+      // let body = $('body').height()
+      window.resizeTo(window.innerWidth, body + topBar + 30) // 30 here is just because for some reason it doesnt like resizing all the way, this is bad form but I've given up
+    }
+
+    // set canvas from parent window
+    function updateCanvas(img, height) {
+      board.setImg(img)
+      if (height) DrawingBoard.Control.Resize.resize(height, true)
+    }
+
+    // create board
+    var board = new DrawingBoard.Board('canvas', {
+      controls: [{
+          Size: {
+            type: 'dropdown'
+          }
+        },
+        {
+          DrawingMode: {
+            filler: true
+          }
+        },
+        'Navigation',
+        'Resize',
+        {
+          Save: {
+            cb: (board) => {
+              // call onCanvasSave function on parent window and close window
+              try {
+                window?.opener.onCanvasSave(board.getImg())
+                window.close()
+              } catch (err) {
+                console.log(err)
+                alert(`due to cross-origin frame rules, you need to use a server to host these files (see console), try 'python3 -m http.server' for testing`)
+              }
+
+            }
+          }
+        }
+      ],
+      size: 6,
+      webStorage: false, // we handle this ourselves
+      enlargeYourContainer: true,
+      background: '#FFFFFF'
+    });
+  </script>
+
+
+</body>
+
+</html>
