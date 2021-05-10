@@ -34,3 +34,6 @@ See [`index.html`](https://qwazwsx.xyz/microCanvas/) for an example.
 # Libraries used
 * [Jquery](https://jquery.com/)
 * [DrawingBoard JS](https://github.com/Leimi/drawingboard.js)
+* [Google Material Design Icons](https://fonts.google.com/icons)
+* [Iconify.design Eraser](https://iconify.design/icon-sets/mdi/eraser.html)
+* [Iconify.design Paint Bucket](https://iconify.design/icon-sets/foundation/paint-bucket.html)
